@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>NutriSync AI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-white p-10">
+
+<h1 class="text-4xl font-bold mb-6">NutriSync AI - Bio Adaptive Diet</h1>
+
+<div class="grid grid-cols-2 gap-4">
+
+<input id="hr" type="number" placeholder="Heart Rate"
+class="p-2 text-black">
+
+<input id="spo2" type="number" placeholder="SpO2"
+class="p-2 text-black">
+
+<input id="bp" type="text" placeholder="Blood Pressure (120/80)"
+class="p-2 text-black">
+
+<select id="goal" class="p-2 text-black">
+<option>Fat Loss</option>
+<option>Muscle Gain</option>
+<option>Balanced</option>
+</select>
+
+<input id="budget" type="number" placeholder="Daily Budget ₹"
+class="p-2 text-black">
+
+<select id="mode" class="p-2 text-black">
+<option>Normal</option>
+<option>Hostel</option>
+</select>
+
+</div>
+
+<button onclick="generateMeal()"
+class="mt-6 bg-blue-500 px-6 py-2 rounded">
+Generate Meal Plan
+</button>
+
+<div id="result" class="mt-6 bg-gray-800 p-4 rounded"></div>
+
+<script>
+async function generateMeal() {
+
+    const response = await fetch("http://127.0.0.1:8000/generate-meal-plan", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({
+            heart_rate: parseInt(document.getElementById("hr").value),
+            spo2: parseInt(document.getElementById("spo2").value),
+            bp: document.getElementById("bp").value,
+            goal: document.getElementById("goal").value,
+            budget: parseInt(document.getElementById("budget").value),
+            mode: document.getElementById("mode").value
+        })
+    });
+
+    const data = await response.json();
+    document.getElementById("result").innerText = data.meal_plan;
+}
+</script>
+
+</body>
+</html>
